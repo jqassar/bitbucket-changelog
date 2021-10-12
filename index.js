@@ -53,7 +53,7 @@ function *getSettings(program) {
 	settings.file = settings.file ? path.resolve(settings.file) : path.resolve(DEFAULT_FILE)
 	settings.baseUrl = `${settings.bitbucket}${settings.basePath}/${settings.projectKey}/repos/${settings.repositoryKey}`
 	settings.fileContents = read(settings.file)
-	settings.filter = !!program.filter
+	settings.filter = program.filter || ''
 
 	verifySettings(settings)
 
