@@ -139,7 +139,9 @@ function getPullRequests(branch, state, since, start, size, results) {
 }
 
 function getPullRequestsPage(branch, state, start, size) {
-	return serviceCall(`${settings.baseUrl}/pull-requests?state=${state}&order=NEWEST&at=refs/heads/${branch}&start=${start}&limit=${size}`)
+	// Add modification ordering to fake semantic ordering:
+	//return serviceCall(`${settings.baseUrl}/pull-requests?state=${state}&order=NEWEST&at=refs/heads/${branch}&start=${start}&limit=${size}`)
+	return serviceCall(`${settings.baseUrl}/pull-requests?state=${state}&order=NEWEST&at=refs/heads/${branch}&start=${start}&limit=${size}&orderBy=MODIFICATION`)
 }
 
 function getTags(start, size, max, tags) {
