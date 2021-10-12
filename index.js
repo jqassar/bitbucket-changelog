@@ -170,14 +170,14 @@ function serviceCall(url) {
 function *buildReleases() {
 	const maxTags = settings.overwrite ? 0 : 1 // get all tags if overwriting
 	const tags = yield getTags(0, 25, maxTags)
-	print('Found ' + tags.len + ' tags')
+	print('Found ' + tags.length + ' tags')
 	const tagCommitPromises = tags.map(tag => getCommit(tag.hash || tag.latestCommit))
 	const tagCommits = yield tagCommitPromises
 	tags.forEach((tag, i) => tag.commit = tagCommits[i])
 
 	const since = (settings.overwrite || !tags.length) ? null : tags[0].commit.authorTimestamp
 	const prs = yield getPullRequests(settings.branch, 'MERGED', since, 0, 50)
-
+	print('Found ' + prs.length + ' prs')
 	const childPrPromises = prs.map(pr => getPullRequests(pr.fromRef.displayId, 'MERGED', null, 0, 25))
 	const childPrs = yield childPrPromises
 	prs.forEach((pr, i) => pr.children = childPrs[i])
