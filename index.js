@@ -135,6 +135,8 @@ function getTags(start, size, max, tags) {
 	return getTagsPage(start, size).then(res => {
 		tags = (tags || []).concat(res.values)
 		if (res.isLastPage || (max && tags.length >= max)) {
+			print('Tags:')
+			print(tags)
 			return tags
 		} else {
 			return getTags(start + 1, size, max, tags)
