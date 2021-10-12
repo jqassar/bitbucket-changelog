@@ -169,9 +169,10 @@ function serviceCall(url) {
 
 function *buildReleases() {
 	const maxTags = settings.overwrite ? 0 : 1 // get all tags if overwriting
-	const tags = yield getTags(0, 25, maxTags)
+	const tags = yield getTags(0, 100, maxTags)
 	print('Found ' + tags.length + ' tags')
-	const tagCommitPromises = tags.map(tag => getCommit(tag.hash || tag.latestCommit))
+	// const tagCommitPromises = tags.map(tag => getCommit(tag.hash || tag.latestCommit))
+	const tagCommitPromises = tags.filter(did => (!did.displayId.startsWith('v99') && !did.displayId.startsWith('v0')).map(tag => getCommit(tag.hash || tag.latestCommit))
 	const tagCommits = yield tagCommitPromises
 	tags.forEach((tag, i) => tag.commit = tagCommits[i])
 
@@ -181,7 +182,7 @@ function *buildReleases() {
 	const childPrPromises = prs.map(pr => getPullRequests(pr.fromRef.displayId, 'MERGED', null, 0, 25))
 	const childPrs = yield childPrPromises
 	prs.forEach((pr, i) => pr.children = childPrs[i])
-
+	print('Mapping releases')
 	let release = { version: settings.version, prs: [], date: Date.now() }
 	let lastTag = tags.shift()
 	const releases = []
