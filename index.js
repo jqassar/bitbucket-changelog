@@ -148,7 +148,8 @@ function getTags(start, size, max, tags) {
 		if (res.isLastPage || (max && tags.length >= max)) {
 			return tags
 		} else {
-			return getTags(start + 1, size, max, tags)
+			// This was start + 1, because...I don't even know.
+			return getTags(start + size, size, max, tags)
 		}
 	})
 }
