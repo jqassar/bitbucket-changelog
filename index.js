@@ -135,8 +135,6 @@ function getTags(start, size, max, tags) {
 	return getTagsPage(start, size).then(res => {
 		tags = (tags || []).concat(res.values)
 		if (res.isLastPage || (max && tags.length >= max)) {
-			print('Tags:')
-			print(tags)
 			return tags
 		} else {
 			return getTags(start + 1, size, max, tags)
@@ -172,7 +170,7 @@ function serviceCall(url) {
 function *buildReleases() {
 	const maxTags = settings.overwrite ? 0 : 1 // get all tags if overwriting
 	const tags = yield getTags(0, 25, maxTags)
-
+	print('Found ' + tags.len + ' tags)
 	const tagCommitPromises = tags.map(tag => getCommit(tag.hash || tag.latestCommit))
 	const tagCommits = yield tagCommitPromises
 	tags.forEach((tag, i) => tag.commit = tagCommits[i])
