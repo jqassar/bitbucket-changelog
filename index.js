@@ -119,12 +119,15 @@ function getPullRequests(branch, state, since, start, size, results) {
 	return getPullRequestsPage(branch, state, start, size).then(res => {
 		let prs = res.values
 		if (since) {
+			print('filtering based on things newer than ' + since)
 			prs = prs.filter(pr => pr.updatedDate > since)
+			print('found ' + prs.length + 'prs in this call')
 		}
 		results = (results || []).concat(prs)
 		if (res.isLastPage || prs.length < res.values.length) {
 			return results.filter(pr => pr.toRef.id === `refs/heads/${branch}`)
 		} else {
+			print('calling prs again...')
 			return getPullRequests(branch, state, since, start + size, size, results)
 		}
 	})
@@ -181,6 +184,7 @@ function *buildReleases() {
 	tags.forEach((tag, i) => tag.commit = tagCommits[i])
 
 	const since = (settings.overwrite || !tags.length) ? null : tags[0].commit.authorTimestamp
+	print('since is ' + since)
 	const prs = yield getPullRequests(settings.branch, 'MERGED', since, 0, 50)
 	print('Found ' + prs.length + ' prs')
 	const childPrPromises = prs.map(pr => getPullRequests(pr.fromRef.displayId, 'MERGED', null, 0, 25))
