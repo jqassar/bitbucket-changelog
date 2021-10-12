@@ -21,6 +21,7 @@ program
 	.option('-o, --overwrite', 'regenerate the full changelog. OVERWRITES the current changelog')
 	.option('-i, --interactive', 'request username / password if not provided')
 	.option('-b, --branch [name]', 'base branch to look for merged pull requests (default: master)')
+	.option('-f, --filter [filter]', 'filter for tags to search')
 	.option('-v, --verbose', 'verbose output')
 	.parse(process.argv)
 
@@ -52,6 +53,7 @@ function *getSettings(program) {
 	settings.file = settings.file ? path.resolve(settings.file) : path.resolve(DEFAULT_FILE)
 	settings.baseUrl = `${settings.bitbucket}${settings.basePath}/${settings.projectKey}/repos/${settings.repositoryKey}`
 	settings.fileContents = read(settings.file)
+	settings.filter = !!program.filter
 
 	verifySettings(settings)
 
@@ -73,7 +75,8 @@ function verifySettings(settings) {
 	assert.ok(settings.bitbucket, 'Please define your bitbucket base url in package.json. See README for more info.')
 	assert.ok(settings.projectKey, 'Please define your bitbucket projectKey in package.json. See README for more info.')
 	assert.ok(settings.repositoryKey, 'Please define your bitbucket repositoryKey in package.json. See README for more info.')
-	assert.ok(typeof settings.branch === 'string', 'Please specify a branch name when using the -b option.See README for more info.')
+	assert.ok(typeof settings.branch === 'string', 'Please specify a branch name when using the -b option. See README for more info.')
+	assert.ok(typeof settings.filter === 'string', 'Please specify a filter string when using the -f option. See README for more info.')
 
 	if (!settings.overwrite) {
 		const releaseTitle = renderReleaseTitle({ version: settings.version })
@@ -143,7 +146,8 @@ function getTags(start, size, max, tags) {
 }
 
 function getTagsPage(start, size) {
-	return serviceCall(`${settings.baseUrl}/tags?start=${start}&limit=${size}`)
+	//return serviceCall(`${settings.baseUrl}/tags?start=${start}&limit=${size}`)
+	return serviceCall(`${settings.baseUrl}/tags?start=${start}&limit=${size}&filterText=${settings.filter}`)
 }
 
 function getCommit(hash) {
