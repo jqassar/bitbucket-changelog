@@ -172,7 +172,7 @@ function *buildReleases() {
 	const tags = yield getTags(0, 100, maxTags)
 	print('Found ' + tags.length + ' tags')
 	// const tagCommitPromises = tags.map(tag => getCommit(tag.hash || tag.latestCommit))
-	const tagCommitPromises = tags.filter(did => (!did.displayId.startsWith('v99') && !did.displayId.startsWith('v0')).map(tag => getCommit(tag.hash || tag.latestCommit))
+	const tagCommitPromises = tags.filter(did => (!did.displayId.startsWith('v99') && !did.displayId.startsWith('v0'))).map(tag => getCommit(tag.hash || tag.latestCommit))
 	const tagCommits = yield tagCommitPromises
 	tags.forEach((tag, i) => tag.commit = tagCommits[i])
 
