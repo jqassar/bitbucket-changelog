@@ -14,7 +14,7 @@ const co = require('co')
 const moment = require('moment')
 const chalk = require('chalk')
 const assert = require('assert')
-const semverCompare = require('compare-versions');
+const compareVersions = require('compare-versions');
 
 const DEFAULT_FILE = 'CHANGES.md'
 const JIRA_REGEX = /(?:)([A-Z0-9]{1,}-[0-9]+)(?=\s|-|_|\/|$)/g
@@ -230,7 +230,7 @@ function *buildReleases() {
 
 function renderReleases(releases) {
 	return releases
-		.sort((a,b) => semverCompare(a.version, b.version))
+		.sort((a,b) => compareVersions(a.version, b.version))
 		.map(r => renderRelease(r))
 		.reduce((all, lines) => all.concat(lines), [])
 		.join('\n') + '\n'
