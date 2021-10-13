@@ -267,7 +267,7 @@ function renderPr(pr, indent) {
 }
 
 function renderPrLink(pr) {
-	return `[${pr.id}](${pr.links.self[0].href})`
+	return `[#${pr.id}](${pr.links.self[0].href})`
 }
 
 function renderAuthor(pr) {
