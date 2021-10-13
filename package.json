@@ -36,7 +36,7 @@
     "bbgenlog": "index.js"
   },
   "dependencies": {
-    "axios": "^0.8.1",
+    "axios": "^0.21.2",
     "chalk": "^1.1.1",
     "co": "^4.6.0",
     "co-prompt": "^1.0.0",
