@@ -230,7 +230,7 @@ function *buildReleases() {
 
 function renderReleases(releases) {
 	return releases
-		.sort((a,b) => compareVersions(a.version, b.version))
+		.sort((a,b) => compareVersions(a.version, b.version)).reverse()
 		.map(r => renderRelease(r))
 		.reduce((all, lines) => all.concat(lines), [])
 		.join('\n') + '\n'
